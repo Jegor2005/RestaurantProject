@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.Console", "RestaurantProject\RestaurantProject.Console.csproj", "{430AA466-91D2-45CB-8A91-13AD72D87C27}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F} = {0AFEB4BC-0E79-4982-9BE3-B782968E966F}
+		{726D4B59-6F4D-44C8-8A54-BC2027548739} = {726D4B59-6F4D-44C8-8A54-BC2027548739}
+		{A7633013-9371-4A62-AF8C-5D98521D351C} = {A7633013-9371-4A62-AF8C-5D98521D351C}
+		{F1E745DD-B59B-4205-B181-C422C957D0F2} = {F1E745DD-B59B-4205-B181-C422C957D0F2}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.DataAccess.Memory", "RestaurantProject.DataAccess.Memory\RestaurantProject.DataAccess.Memory.csproj", "{A7633013-9371-4A62-AF8C-5D98521D351C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F} = {0AFEB4BC-0E79-4982-9BE3-B782968E966F}
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB} = {4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.DataModel", "RestaurantProject.DataModel\RestaurantProject.DataModel.csproj", "{0AFEB4BC-0E79-4982-9BE3-B782968E966F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.ServiceAbstractions", "RestaurantProject.ServiceAbstractions\RestaurantProject.ServiceAbstractions.csproj", "{F1E745DD-B59B-4205-B181-C422C957D0F2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F} = {0AFEB4BC-0E79-4982-9BE3-B782968E966F}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.Services.Memory", "RestaurantProject.Services.Memory\RestaurantProject.Services.Memory.csproj", "{726D4B59-6F4D-44C8-8A54-BC2027548739}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F} = {0AFEB4BC-0E79-4982-9BE3-B782968E966F}
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB} = {4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}
+		{A7633013-9371-4A62-AF8C-5D98521D351C} = {A7633013-9371-4A62-AF8C-5D98521D351C}
+		{F1E745DD-B59B-4205-B181-C422C957D0F2} = {F1E745DD-B59B-4205-B181-C422C957D0F2}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantProject.Abstractions", "RestaurantProject.Abstractions\RestaurantProject.Abstractions.csproj", "{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{430AA466-91D2-45CB-8A91-13AD72D87C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430AA466-91D2-45CB-8A91-13AD72D87C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430AA466-91D2-45CB-8A91-13AD72D87C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430AA466-91D2-45CB-8A91-13AD72D87C27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7633013-9371-4A62-AF8C-5D98521D351C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7633013-9371-4A62-AF8C-5D98521D351C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7633013-9371-4A62-AF8C-5D98521D351C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7633013-9371-4A62-AF8C-5D98521D351C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AFEB4BC-0E79-4982-9BE3-B782968E966F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E745DD-B59B-4205-B181-C422C957D0F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E745DD-B59B-4205-B181-C422C957D0F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E745DD-B59B-4205-B181-C422C957D0F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E745DD-B59B-4205-B181-C422C957D0F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{726D4B59-6F4D-44C8-8A54-BC2027548739}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{726D4B59-6F4D-44C8-8A54-BC2027548739}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{726D4B59-6F4D-44C8-8A54-BC2027548739}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{726D4B59-6F4D-44C8-8A54-BC2027548739}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FFF1B7B-7BC4-43AE-82A2-25D6198F53AB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {470FAA67-EE37-4A83-8949-80AD1F918B12}
+	EndGlobalSection
+EndGlobal
