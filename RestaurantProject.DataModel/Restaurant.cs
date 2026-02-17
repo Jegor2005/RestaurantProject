@@ -11,7 +11,7 @@ namespace RestaurantProject.DataModel
     {
         public string Color { get; set; }
         public string Address { get; set; }
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public decimal Rent { get; set; }
         public Menu Menu { get; set; }
     }

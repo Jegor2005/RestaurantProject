@@ -8,6 +8,7 @@ namespace RestaurantProject.DataModel
 {
     public class Order
     {
+        public int Id { get; set; }
         public Waiter Waiter {  get; set; }
         public DayOfWeek Day { get; set; } 
         public decimal Amount { get; set; }

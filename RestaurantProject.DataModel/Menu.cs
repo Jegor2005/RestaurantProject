@@ -8,6 +8,7 @@ namespace RestaurantProject.DataModel
 {
     public class Menu
     {
+        public int Id { get; set; }
         public IList<Dish> Dishes { get; set; }
     }
 }
