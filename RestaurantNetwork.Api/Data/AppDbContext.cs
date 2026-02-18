@@ -10,4 +10,11 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Restaurant>()
+            .HasOne(r => r.Menu)
+            .WithMany()              
+            .IsRequired(false);      
+    }
 }
