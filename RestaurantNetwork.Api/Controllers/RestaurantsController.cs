@@ -39,6 +39,21 @@ namespace RestaurantNetwork.Api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
+
+        //PUT: api/restaurants/id
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, UpdateRestaurantDto dto)
+        {
+            var ok = await _service.UpdateAsync(id, dto);
+            return ok ? NoContent() : NotFound();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ok = await _service.DeleteAsync(id);
+            return ok ? NoContent() : NotFound();
+        }
     }
 
 }

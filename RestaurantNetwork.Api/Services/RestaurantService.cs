@@ -60,6 +60,24 @@ namespace RestaurantNetwork.Api.Services
                 Rent = restaurant.Rent
             };
         }
+        public async Task<bool> UpdateAsync (int id, UpdateRestaurantDto dto)
+        {
+            var entity =  await _db.Restaurants.FindAsync(id);
+            if (entity is null) return false;
+            entity.Color = dto.Color;
+            entity.Address = dto.Address;
+            entity.Rent = dto.Rent;
+            await _db.SaveChangesAsync();
+            return true;
+        }
 
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var entity = await _db.Restaurants.FindAsync(id);
+            if (entity is null) return false;
+            _db.Restaurants.Remove(entity);
+            await _db.SaveChangesAsync();
+            return true;
+        }
     }
 }
