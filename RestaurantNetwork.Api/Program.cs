@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantNetwork.Api.Data;
+using RestaurantNetwork.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +12,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 Console.WriteLine("DB PATH: " + Path.GetFullPath("restaurantproject.db"));
 
 

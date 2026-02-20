@@ -1,48 +1,33 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantNetwork.Api.Data;
-using RestaurantProject.DataModel;
 using Microsoft.EntityFrameworkCore;
+using RestaurantNetwork.Api.Data;
 using RestaurantNetwork.Api.DTO;
+using RestaurantNetwork.Api.Services;
+using RestaurantProject.DataModel;
 namespace RestaurantNetwork.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class RestaurantsController : ControllerBase
     {
-        private readonly AppDbContext _db;
+        private readonly IRestaurantService _service;
 
-        public RestaurantsController(AppDbContext db)
+        public RestaurantsController(IRestaurantService service)
         {
-            _db = db;
+            _service = service;
         }
 
         // GET: api/restaurants
         [HttpGet]
-        public async Task<ActionResult<List<RestaurantDto>>> GetAll()
-        {
-            var items = await _db.Restaurants.Select(r => new RestaurantDto
-            {
-                Id= r.Id,
-                Color= r.Color,
-                Address= r.Address,
-                Rent= r.Rent
-            }).ToListAsync();
-            return Ok(items);
-        }
+        public async Task<ActionResult<List<RestaurantDto>>> GetAll() => Ok(await _service.GetAllAsync());
 
         // GET: api/restaurants/5
         [HttpGet("{id:int}")]
         public async Task<ActionResult<RestaurantDto>> GetById(int id)
         {
-            var item = await _db.Restaurants.Where(r => r.Id == id).Select(r => new RestaurantDto
-            {
-                Id = r.Id,
-                Color = r.Color,
-                Address = r.Address,
-                Rent = r.Rent
-            }).FirstOrDefaultAsync();
-            if (item is null) return NotFound();
+            var item=await _service.GetByIdAsync(id);
+            if (item == null) return NotFound();
             return Ok(item);
         }
 
@@ -50,24 +35,9 @@ namespace RestaurantNetwork.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<RestaurantDto>> Create(CreateRestaurantDto dto)
         {
-            var restaurant = new Restaurant
-            {
-                Color = dto.Color,
-                Address = dto.Address,
-                Rent = dto.Rent
-            };
-            _db.Restaurants.Add(restaurant);
-            await _db.SaveChangesAsync();
+            var created = await _service.CreateAsync(dto);
 
-            var result = new RestaurantDto
-            {
-                Id = restaurant.Id,
-                Color = restaurant.Color,
-                Address = restaurant.Address,
-                Rent = restaurant.Rent
-            };
-
-            return CreatedAtAction(nameof(GetById), new { id = restaurant.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
     }
 
