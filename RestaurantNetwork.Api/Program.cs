@@ -15,7 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 Console.WriteLine("DB PATH: " + Path.GetFullPath("restaurantproject.db"));
-
+builder.Services.AddHttpLogging(o =>
+{
+    o.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
+});
 
 var app = builder.Build();
 
@@ -27,6 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseExceptionHandler();
+
+app.UseHttpLogging();
 
 app.UseHttpsRedirection();
 
