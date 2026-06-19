@@ -8,7 +8,7 @@
 
         public decimal? MaxPrice { get; set; }
 
-        public string SortBy { get; set; } = "name";
+        public string SortBy { get; set; } = "id";
 
         public string SortDirection { get; set; } = "asc";
 

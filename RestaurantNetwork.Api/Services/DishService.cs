@@ -52,7 +52,10 @@ namespace RestaurantNetwork.Api.Services
                 ("category", _) => dishesQuery.OrderBy(dish => dish.Category),
 
                 ("name", "desc") => dishesQuery.OrderByDescending(dish => dish.Name),
-                _ => dishesQuery.OrderBy(dish => dish.Name)
+                ("name", _) => dishesQuery.OrderBy(dish => dish.Name),
+
+                ("id", "desc") => dishesQuery.OrderByDescending(dish => dish.Id),
+                _ => dishesQuery.OrderBy(dish => dish.Id)
             };
 
             var pageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;

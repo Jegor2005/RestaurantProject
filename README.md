@@ -84,7 +84,7 @@ RestaurantNetwork.Api
 RestaurantNetwork.Api.Tests
 └── DishServiceTests.cs
 
-Domain models are stored in:
+### Domain models are stored in:
 
 
 RestaurantProject.DataModel
@@ -105,11 +105,11 @@ RestaurantNetwork.Api.Tests
 
 The tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
 
-# To run tests in Visual Studio:
+## To run tests in Visual Studio:
 
 Test → Run All Tests
 
-# Or using .NET CLI:
+#### Or using .NET CLI:
 
 dotnet test
 
@@ -186,28 +186,28 @@ json
 
 The `GET /api/dishes` endpoint supports filtering, sorting, and pagination.
 
-### Filtering
+# Filtering
 
-# Filter dishes by category:
+## Filter dishes by category:
 
 http
 GET /api/dishes?category=Salad
 GET /api/dishes?minPrice=8&maxPrice=12
 GET /api/dishes?sortBy=price&sortDirection=desc
 
-# Supported sortBy values:
+## Supported sortBy values:
 name
 category
 price
 
-# Supported sortDirection values:
+## Supported sortDirection values:
 asc
 desc
 
-# Pagination
+## Pagination
 GET /api/dishes?pageNumber=1&pageSize=5
 
-# The response contains:
+## The response contains:
 {
   "items": [],
   "totalCount": 9,
@@ -216,7 +216,7 @@ GET /api/dishes?pageNumber=1&pageSize=5
   "totalPages": 2
 }
 
-# Combined Example
+### Combined Example
 
 GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc&pageNumber=1&pageSize=3
 
@@ -279,13 +279,13 @@ The project uses ASP.NET Core ProblemDetails for global error handling.
 Common responses:
 
 
-200 OK
-201 Created
-204 No Content
-400 Bad Request
-404 Not Found
-409 Conflict
-500 Internal Server Error
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400 Bad Request
+- 404 Not Found
+- 409 Conflict
+- 500 Internal Server Error
 
 
 ## Future Improvements
