@@ -156,31 +156,34 @@ DELETE /api/dishes/{id}
 
 ### Create Restaurant
 
-json
+```json
 {
   "color": "Red",
   "address": "Maribor, Slovenia",
   "rent": 1200
 }
+```
 
 ### Create Menu for Restaurant
 
-json
+```json
 {
   "name": "Main Menu",
   "description": "Default restaurant menu"
 }
+```
 
 
 ### Create Dish for Menu
 
-json
+```json
 {
   "name": "Classic Burger",
   "price": 12.5,
   "category": "Main Course",
   "description": "Burger with beef, cheese and sauce"
 }
+```
 
 ## Dish Query Options
 
@@ -196,18 +199,19 @@ GET /api/dishes?minPrice=8&maxPrice=12
 GET /api/dishes?sortBy=price&sortDirection=desc
 
 ## Supported sortBy values:
-name
-category
-price
+- name
+- category
+- price
 
 ## Supported sortDirection values:
-asc
-desc
+- asc
+- desc
 
 ## Pagination
 GET /api/dishes?pageNumber=1&pageSize=5
 
 ## The response contains:
+```json
 {
   "items": [],
   "totalCount": 9,
@@ -215,6 +219,7 @@ GET /api/dishes?pageNumber=1&pageSize=5
   "pageSize": 5,
   "totalPages": 2
 }
+```
 
 ### Combined Example
 
@@ -241,12 +246,13 @@ The project uses Entity Framework Core with SQLite.
 
 Connection string example:
 
-json
+```json
 {
   "ConnectionStrings": {
     "Default": "Data Source=restaurantproject.db"
   }
 }
+```
 
 
 Migrations are applied automatically on startup.
