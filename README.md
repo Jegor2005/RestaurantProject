@@ -26,16 +26,19 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * Automatically apply EF Core migrations on startup
 * Automatically seed initial data
 * Explore and test endpoints through Swagger UI
+* Filter dishes by category and price range
+* Sort dishes by name, category, and price
+* Use pagination for dish lists
 
 ## Domain Model
 
 The current MVP contains three main entities:
 
-```text
+
 Restaurant
    └── Menu
           └── Dishes
-```
+
 
 A restaurant can have one menu.
 A menu belongs to one restaurant.
@@ -44,7 +47,6 @@ Each dish belongs to one menu.
 
 ## Project Structure
 
-```text
 RestaurantNetwork.Api
 ├── Controllers
 │   ├── RestaurantsController.cs
@@ -76,79 +78,119 @@ RestaurantNetwork.Api
 │   └── DishService.cs
 │
 └── Program.cs
-```
+
 
 Domain models are stored in:
 
-```text
+
 RestaurantProject.DataModel
-```
+
 
 ## API Endpoints
 
 ### Restaurants
 
-```http
+
 GET    /api/restaurants
 GET    /api/restaurants/{id}
 POST   /api/restaurants
 PUT    /api/restaurants/{id}
 DELETE /api/restaurants/{id}
-```
+
 
 ### Menus
 
-```http
 GET    /api/menus
 GET    /api/menus/{id}
 GET    /api/restaurants/{restaurantId}/menu
 POST   /api/restaurants/{restaurantId}/menu
 PUT    /api/menus/{id}
 DELETE /api/menus/{id}
-```
+
 
 ### Dishes
 
-```http
+
 GET    /api/dishes
 GET    /api/dishes/{id}
+GET    /api/dishes?category=Salad
+GET    /api/dishes?minPrice=8&maxPrice=12
+GET    /api/dishes?sortBy=price&sortDirection=desc
+GET    /api/dishes?pageNumber=1&pageSize=5
 GET    /api/menus/{menuId}/dishes
 POST   /api/menus/{menuId}/dishes
 PUT    /api/dishes/{id}
 DELETE /api/dishes/{id}
-```
+
 
 ## Example Requests
 
 ### Create Restaurant
 
-```json
+json
 {
   "color": "Red",
   "address": "Maribor, Slovenia",
   "rent": 1200
 }
-```
 
 ### Create Menu for Restaurant
 
-```json
+json
 {
   "name": "Main Menu",
   "description": "Default restaurant menu"
 }
-```
+
 
 ### Create Dish for Menu
 
-```json
+json
 {
   "name": "Classic Burger",
   "price": 12.5,
   "category": "Main Course",
   "description": "Burger with beef, cheese and sauce"
 }
-```
+
+## Dish Query Options
+
+The `GET /api/dishes` endpoint supports filtering, sorting, and pagination.
+
+### Filtering
+
+Filter dishes by category:
+
+http
+GET /api/dishes?category=Salad
+GET /api/dishes?minPrice=8&maxPrice=12
+GET /api/dishes?sortBy=price&sortDirection=desc
+
+Supported sortBy values:
+name
+category
+price
+
+Supported sortDirection values:
+asc
+desc
+
+Pagination
+GET /api/dishes?pageNumber=1&pageSize=5
+
+The response contains:
+{
+  "items": [],
+  "totalCount": 9,
+  "pageNumber": 1,
+  "pageSize": 5,
+  "totalPages": 2
+}
+
+Combined Example
+
+GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc&pageNumber=1&pageSize=3
+
 
 ## How to Run
 
@@ -170,13 +212,13 @@ The project uses Entity Framework Core with SQLite.
 
 Connection string example:
 
-```json
+json
 {
   "ConnectionStrings": {
     "Default": "Data Source=restaurantproject.db"
   }
 }
-```
+
 
 Migrations are applied automatically on startup.
 
@@ -207,7 +249,7 @@ The project uses ASP.NET Core ProblemDetails for global error handling.
 
 Common responses:
 
-```text
+
 200 OK
 201 Created
 204 No Content
@@ -215,15 +257,12 @@ Common responses:
 404 Not Found
 409 Conflict
 500 Internal Server Error
-```
+
 
 ## Future Improvements
 
 Possible next improvements:
 
-* pagination
-* filtering
-* sorting
 * unit tests
 * integration tests
 * authentication and authorization
