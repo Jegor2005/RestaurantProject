@@ -16,6 +16,8 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * DataAnnotations validation
 * ProblemDetails
 * HTTP Logging
+* xUnit
+* EF Core SQLite in-memory testing
 
 ## Main Features
 
@@ -29,6 +31,7 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * Filter dishes by category and price range
 * Sort dishes by name, category, and price
 * Use pagination for dish lists
+* Service layer tests for dish filtering, sorting, pagination, and creation
 
 ## Domain Model
 
@@ -78,12 +81,38 @@ RestaurantNetwork.Api
 │   └── DishService.cs
 │
 └── Program.cs
-
+RestaurantNetwork.Api.Tests
+└── DishServiceTests.cs
 
 Domain models are stored in:
 
 
 RestaurantProject.DataModel
+
+## Tests
+
+The solution contains a test project:
+
+RestaurantNetwork.Api.Tests
+
+
+
+## Current tests cover DishService behavior:
+* pagination
+* category filtering
+* price sorting
+* dish creation for an existing menu
+
+The tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
+
+# To run tests in Visual Studio:
+
+Test → Run All Tests
+
+# Or using .NET CLI:
+
+dotnet test
+
 
 
 ## API Endpoints
@@ -159,26 +188,26 @@ The `GET /api/dishes` endpoint supports filtering, sorting, and pagination.
 
 ### Filtering
 
-Filter dishes by category:
+# Filter dishes by category:
 
 http
 GET /api/dishes?category=Salad
 GET /api/dishes?minPrice=8&maxPrice=12
 GET /api/dishes?sortBy=price&sortDirection=desc
 
-Supported sortBy values:
+# Supported sortBy values:
 name
 category
 price
 
-Supported sortDirection values:
+# Supported sortDirection values:
 asc
 desc
 
-Pagination
+# Pagination
 GET /api/dishes?pageNumber=1&pageSize=5
 
-The response contains:
+# The response contains:
 {
   "items": [],
   "totalCount": 9,
@@ -187,7 +216,7 @@ The response contains:
   "totalPages": 2
 }
 
-Combined Example
+# Combined Example
 
 GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc&pageNumber=1&pageSize=3
 
@@ -262,8 +291,8 @@ Common responses:
 ## Future Improvements
 
 Possible next improvements:
-
-* unit tests
+* more service tests
+* controller/integration tests
 * integration tests
 * authentication and authorization
 * Docker support
