@@ -16,7 +16,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
 builder.Services.AddScoped<IDishService, DishService>();
-Console.WriteLine("DB PATH: " + Path.GetFullPath("restaurantproject.db"));
 builder.Services.AddHttpLogging(o =>
 {
     o.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.All;
