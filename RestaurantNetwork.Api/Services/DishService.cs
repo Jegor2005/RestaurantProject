@@ -14,10 +14,56 @@ namespace RestaurantNetwork.Api.Services
             _db = db;
         }
 
-        public async Task<IEnumerable<DishDto>> GetAllAsync()
+        public async Task<PagedResultDto<DishDto>> GetAllAsync(DishQueryDto query)
         {
-            return await _db.Dishes
+            var dishesQuery = _db.Dishes
                 .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Category))
+            {
+                var category = query.Category.ToLower();
+
+                dishesQuery = dishesQuery
+                    .Where(dish => dish.Category.ToLower() == category);
+            }
+
+            if (query.MinPrice.HasValue)
+            {
+                dishesQuery = dishesQuery
+                    .Where(dish => dish.Price >= query.MinPrice.Value);
+            }
+
+            if (query.MaxPrice.HasValue)
+            {
+                dishesQuery = dishesQuery
+                    .Where(dish => dish.Price <= query.MaxPrice.Value);
+            }
+
+            var sortBy = query.SortBy.ToLower();
+            var sortDirection = query.SortDirection.ToLower();
+
+            dishesQuery = (sortBy, sortDirection) switch
+            {
+                ("price", "desc") => dishesQuery.OrderByDescending(dish => dish.Price),
+                ("price", _) => dishesQuery.OrderBy(dish => dish.Price),
+
+                ("category", "desc") => dishesQuery.OrderByDescending(dish => dish.Category),
+                ("category", _) => dishesQuery.OrderBy(dish => dish.Category),
+
+                ("name", "desc") => dishesQuery.OrderByDescending(dish => dish.Name),
+                _ => dishesQuery.OrderBy(dish => dish.Name)
+            };
+
+            var pageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
+            var pageSize = query.PageSize < 1 ? 10 : query.PageSize;
+            pageSize = pageSize > 50 ? 50 : pageSize;
+
+            var totalCount = await dishesQuery.CountAsync();
+
+            var items = await dishesQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(dish => new DishDto
                 {
                     Id = dish.Id,
@@ -28,6 +74,15 @@ namespace RestaurantNetwork.Api.Services
                     MenuId = dish.MenuId
                 })
                 .ToListAsync();
+
+            return new PagedResultDto<DishDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
         }
 
         public async Task<DishDto?> GetByIdAsync(int id)

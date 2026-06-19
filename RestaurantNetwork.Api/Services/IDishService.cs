@@ -4,7 +4,7 @@ namespace RestaurantNetwork.Api.Services
 {
     public interface IDishService
     {
-        Task<IEnumerable<DishDto>> GetAllAsync();
+        Task<PagedResultDto<DishDto>> GetAllAsync(DishQueryDto query);
 
         Task<DishDto?> GetByIdAsync(int id);
 

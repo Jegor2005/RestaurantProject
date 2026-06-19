@@ -16,9 +16,9 @@ namespace RestaurantNetwork.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DishDto>>> GetAll()
+        public async Task<ActionResult<PagedResultDto<DishDto>>> GetAll([FromQuery] DishQueryDto query)
         {
-            var dishes = await _dishService.GetAllAsync();
+            var dishes = await _dishService.GetAllAsync(query);
 
             return Ok(dishes);
         }

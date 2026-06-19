@@ -25,6 +25,16 @@ public class AppDbContext : DbContext
             .ToTable("Dishes");
 
         modelBuilder.Entity<Restaurant>()
+            .Property(r => r.Rent)
+            .HasConversion<double>()
+            .HasColumnType("REAL");
+
+        modelBuilder.Entity<Dish>()
+            .Property(d => d.Price)
+            .HasConversion<double>()
+            .HasColumnType("REAL");
+
+        modelBuilder.Entity<Restaurant>()
             .HasOne(r => r.Menu)
             .WithOne(m => m.Restaurant)
             .HasForeignKey<Menu>(m => m.RestaurantId)
