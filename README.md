@@ -1,4 +1,5 @@
 ﻿# RestaurantProject
+[![.NET Build and Test](https://github.com/Jegor2005/RestaurantProject/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Jegor2005/RestaurantProject/actions/workflows/dotnet.yml)
 
 RestaurantProject is a .NET 8 ASP.NET Core Web API for managing a small restaurant network.
 
