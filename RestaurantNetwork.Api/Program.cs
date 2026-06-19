@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
+builder.Services.AddScoped<IMenuService, MenuService>();
 Console.WriteLine("DB PATH: " + Path.GetFullPath("restaurantproject.db"));
 builder.Services.AddHttpLogging(o =>
 {
