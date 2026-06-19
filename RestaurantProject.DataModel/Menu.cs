@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RestaurantProject.DataModel
+﻿namespace RestaurantProject.DataModel
 {
     public class Menu
     {
         public int Id { get; set; }
-        public IList<Dish> Dishes { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        public string? Description { get; set; }
+
+        public int RestaurantId { get; set; }
+
+        public Restaurant Restaurant { get; set; } = null!;
+
+        public IList<Dish> Dishes { get; set; } = new List<Dish>();
     }
 }
