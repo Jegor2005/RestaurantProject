@@ -32,7 +32,7 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * Filter dishes by category and price range
 * Sort dishes by name, category, and price
 * Use pagination for dish lists
-* Service layer tests for dish filtering, sorting, pagination, and creation
+* Service layer tests for restaurant, menu, and dish logic
 
 ## Domain Model
 
@@ -83,34 +83,48 @@ RestaurantNetwork.Api
 │
 └── Program.cs
 RestaurantNetwork.Api.Tests
-└── DishServiceTests.cs
+├── DishServiceTests.cs
+├── MenuServiceTests.cs
+└── RestaurantServiceTests.cs
 
 ### Domain models are stored in:
 
 
 RestaurantProject.DataModel
 
-## Tests
+Tests
 
 The solution contains a test project:
 
 RestaurantNetwork.Api.Tests
 
+Current service tests cover:
 
+RestaurantService
+- creating a restaurant
+- updating an existing restaurant
+- returning false when updating a missing restaurant
+- deleting an existing restaurant
 
-## Current tests cover DishService behavior:
-* pagination
-* category filtering
-* price sorting
-* dish creation for an existing menu
+MenuService
+- checking if a restaurant exists
+- checking if a restaurant has a menu
+- creating a menu for an existing restaurant
+- deleting an existing menu
+
+DishService
+- pagination
+- category filtering
+- price sorting
+- dish creation for an existing menu
 
 The tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
 
-## To run tests in Visual Studio:
+To run tests in Visual Studio:
 
 Test → Run All Tests
 
-#### Or using .NET CLI:
+Or using .NET CLI:
 
 dotnet test
 
@@ -186,33 +200,40 @@ DELETE /api/dishes/{id}
 }
 ```
 
-## Dish Query Options
+Dish Query Options
 
-The `GET /api/dishes` endpoint supports filtering, sorting, and pagination.
+The GET /api/dishes endpoint supports filtering, sorting, and pagination.
 
-# Filtering
+Filtering
 
-## Filter dishes by category:
+Filter dishes by category:
 
-http
 GET /api/dishes?category=Salad
+
+Filter dishes by price range:
+
 GET /api/dishes?minPrice=8&maxPrice=12
+Sorting
+
+Sort dishes by name, category, or price:
+
 GET /api/dishes?sortBy=price&sortDirection=desc
 
-## Supported sortBy values:
-- name
-- category
-- price
+Supported sortBy values:
 
-## Supported sortDirection values:
-- asc
-- desc
+name
+category
+price
 
-## Pagination
+Supported sortDirection values:
+
+asc
+desc
+Pagination
 GET /api/dishes?pageNumber=1&pageSize=5
 
-## The response contains:
-```json
+The response contains:
+
 {
   "items": [],
   "totalCount": 9,
@@ -220,10 +241,7 @@ GET /api/dishes?pageNumber=1&pageSize=5
   "pageSize": 5,
   "totalPages": 2
 }
-```
-
-### Combined Example
-
+#### Combined Example
 GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc&pageNumber=1&pageSize=3
 
 
