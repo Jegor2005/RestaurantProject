@@ -19,6 +19,8 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * HTTP Logging
 * xUnit
 * EF Core SQLite in-memory testing
+* Microsoft.AspNetCore.Mvc.Testing
+* API integration testing
 
 ## Main Features
 
@@ -33,6 +35,7 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * Sort dishes by name, category, and price
 * Use pagination for dish lists
 * Service layer tests for restaurant, menu, and dish logic
+* API integration tests for key endpoints
 
 ## Domain Model
 
@@ -83,6 +86,7 @@ RestaurantNetwork.Api
 │
 └── Program.cs
 RestaurantNetwork.Api.Tests
+├── ApiIntegrationTests.cs
 ├── DishServiceTests.cs
 ├── MenuServiceTests.cs
 └── RestaurantServiceTests.cs
@@ -92,14 +96,21 @@ RestaurantNetwork.Api.Tests
 
 RestaurantProject.DataModel
 
-Tests
+## Tests
 
 The solution contains a test project:
 
+```text
 RestaurantNetwork.Api.Tests
+```
+
+The project includes service tests and API integration tests.
+
+### Service Tests
 
 Current service tests cover:
 
+```text
 RestaurantService
 - creating a restaurant
 - updating an existing restaurant
@@ -117,17 +128,41 @@ DishService
 - category filtering
 - price sorting
 - dish creation for an existing menu
+```
 
-The tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
+Service tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
+
+### API Integration Tests
+
+Integration tests verify the API through real HTTP requests using `WebApplicationFactory`.
+
+Current integration tests cover:
+
+```text
+GET /api/restaurants
+GET /api/dishes?pageNumber=1&pageSize=5
+GET /api/dishes/999
+```
+
+These tests check the full request flow:
+
+```text
+HTTP request → Controller → Service → EF Core → SQLite in-memory → HTTP response
+```
+
+### Running Tests
 
 To run tests in Visual Studio:
 
+```text
 Test → Run All Tests
+```
 
 Or using .NET CLI:
 
+```bash
 dotnet test
-
+```
 
 
 ## API Endpoints
@@ -317,8 +352,7 @@ Common responses:
 
 Possible next improvements:
 * more service tests
-* controller/integration tests
-* integration tests
+* more API integration tests
 * authentication and authorization
 * Docker support
 * order management
