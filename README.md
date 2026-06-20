@@ -164,6 +164,17 @@ Or using .NET CLI:
 dotnet test
 ```
 
+## Continuous Integration
+
+The project uses GitHub Actions to automatically run build and tests on every push and pull request to the `master` branch.
+
+The workflow runs:
+
+```text
+dotnet restore
+dotnet build
+dotnet test
+```
 
 ## API Endpoints
 
@@ -282,17 +293,56 @@ GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc
 
 ## How to Run
 
+### Requirements
+
+```text
+.NET 8 SDK
+```
+
+### Run with Visual Studio
+
 1. Clone the repository.
-
 2. Open the solution in Visual Studio.
-
 3. Set `RestaurantNetwork.Api` as the startup project.
-
 4. Run the project.
-
 5. Open Swagger UI in the browser.
 
+### Run with .NET CLI
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Jegor2005/RestaurantProject.git
+cd RestaurantProject
+```
+
+Restore dependencies:
+
+```bash
+dotnet restore
+```
+
+Build the solution:
+
+```bash
+dotnet build
+```
+
+Run the API:
+
+```bash
+dotnet run --project RestaurantNetwork.Api
+```
+
+Run tests:
+
+```bash
+dotnet test
+```
+
 The application uses SQLite. The database file is created automatically when the project starts.
+
+Migrations are applied automatically on startup, and seed data is inserted if the database is empty.
 
 ## Database
 
