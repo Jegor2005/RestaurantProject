@@ -124,5 +124,11 @@ namespace RestaurantNetwork.Api.Data
 
             await db.SaveChangesAsync();
         }
+        public static async Task ResetAsync(AppDbContext db)
+        {
+            await db.Restaurants.ExecuteDeleteAsync();
+
+            await SeedAsync(db);
+        }
     }
 }
