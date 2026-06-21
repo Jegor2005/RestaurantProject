@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
-import { getDishesByMenuId } from './api/dishApi'
+import { createDishForMenu, getDishesByMenuId } from './api/dishApi'
+import {
+  initialDishFormState,
+  type DishFormState,
+} from './types/dishForm'
 import type { DishDto } from './types/dish'
 import {
   createMenuForRestaurant,
@@ -43,6 +47,9 @@ function App() {
   const [selectedMenu, setSelectedMenu] = useState<MenuDto | null>(null)
   const [isMenuLoading, setIsMenuLoading] = useState(false)
   const [selectedDishes, setSelectedDishes] = useState<DishDto[]>([])
+  const [dishFormData, setDishFormData] =
+  useState<DishFormState>(initialDishFormState)
+const [isDishSubmitting, setIsDishSubmitting] = useState(false)
   const [menuFormData, setMenuFormData] =
     useState<MenuFormState>(initialMenuFormState)
   const [isMenuSubmitting, setIsMenuSubmitting] = useState(false)
@@ -137,6 +144,43 @@ function App() {
     setErrorMessage(null)
   }
 
+  async function handleCreateDish(event: FormEvent<HTMLFormElement>) {
+  event.preventDefault()
+
+  if (selectedMenu === null) {
+    return
+  }
+
+  const priceValue = Number(dishFormData.price)
+
+  if (
+    !dishFormData.name.trim() ||
+    !dishFormData.category.trim() ||
+    priceValue <= 0
+  ) {
+    setErrorMessage('Dish name, category and positive price are required.')
+    return
+  }
+
+  try {
+    setIsDishSubmitting(true)
+    setErrorMessage(null)
+
+    const createdDish = await createDishForMenu(selectedMenu.id, {
+      name: dishFormData.name.trim(),
+      price: priceValue,
+      category: dishFormData.category.trim(),
+      description: dishFormData.description.trim(),
+    })
+
+    setSelectedDishes((currentDishes) => [...currentDishes, createdDish])
+    setDishFormData(initialDishFormState)
+  } catch {
+    setErrorMessage('Failed to create dish.')
+  } finally {
+    setIsDishSubmitting(false)
+  }
+}
   async function handleViewMenu(restaurantId: number) {
   try {
     setIsMenuLoading(true)
@@ -145,6 +189,7 @@ function App() {
     setSelectedMenu(null)
     setSelectedDishes([])
     setMenuFormData(initialMenuFormState)
+    setDishFormData(initialDishFormState)
 
     const menu = await getMenuByRestaurantId(restaurantId)
 
@@ -370,10 +415,11 @@ function App() {
                       {selectedMenu.restaurantId}
                     </p>
                     <div className="dishes-section">
-                  <h4>Dishes</h4> {selectedDishes.length === 0 && (
-                    <p className="empty-message">No dishes found for this menu.</p>
-                  )}
-                  {selectedDishes.length > 0 && (
+                      <h4>Dishes</h4> 
+                      {selectedDishes.length === 0 && (
+                      <p className="empty-message">No dishes found for this menu.</p>
+                      )}
+                      {selectedDishes.length > 0 && (
                     <div className="dish-list">
                       {selectedDishes.map((dish) => (
                         <article key={dish.id} className="dish-card">
@@ -388,8 +434,76 @@ function App() {
                       </article>
                       ))}
                     </div>
-  )}
-</div>
+                      )}
+                      <form className="dish-form" onSubmit={handleCreateDish}>
+                    <h4>Add dish</h4>
+
+                    <div className="dish-form-grid">
+                      <label>
+                        Name
+                        <input
+                          value={dishFormData.name}
+                          onChange={(event) =>
+                            setDishFormData({
+                              ...dishFormData,
+                              name: event.target.value,
+                            })
+                          }
+                          placeholder="Margherita"
+                        />
+                      </label>
+
+                      <label>
+                        Category
+                        <input
+                          value={dishFormData.category}
+                          onChange={(event) =>
+                            setDishFormData({
+                              ...dishFormData,
+                              category: event.target.value,
+                            })
+                          }
+                          placeholder="Pizza"
+                        />
+                      </label>
+
+                      <label>
+                        Price
+                        <input
+                          type="number"
+                          min="0.01"
+                          step="0.01"
+                          value={dishFormData.price}
+                          onChange={(event) =>
+                            setDishFormData({
+                              ...dishFormData,
+                              price: event.target.value,
+                            })
+                          }
+                          placeholder="12.50"
+                        />
+                      </label>
+                    </div>
+
+  <label>
+    Description
+    <textarea
+      value={dishFormData.description}
+      onChange={(event) =>
+        setDishFormData({
+          ...dishFormData,
+          description: event.target.value,
+        })
+      }
+      placeholder="Classic pizza with tomato sauce and cheese"
+    />
+  </label>
+
+  <button type="submit" disabled={isDishSubmitting}>
+    {isDishSubmitting ? 'Adding...' : 'Add dish'}
+  </button>
+</form>
+                    </div>
                   </div>
                 )}
 

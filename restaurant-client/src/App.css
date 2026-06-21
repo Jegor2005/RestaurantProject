@@ -233,4 +233,29 @@ textarea {
 
 .dish-card p {
   margin: 6px 0;
+}.dish-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.dish-form h4 {
+  margin: 0;
+  color: #111827;
+}
+
+.dish-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 760px) {
+  .dish-form-grid {
+    grid-template-columns: 1fr;
+  }
 }

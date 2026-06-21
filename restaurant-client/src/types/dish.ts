@@ -6,3 +6,10 @@ export interface DishDto {
   description: string
   menuId: number
 }
+
+export interface CreateDishDto {
+  name: string
+  price: number
+  category: string
+  description: string
+}

@@ -1,8 +1,20 @@
 import { httpClient } from './httpClient'
-import type { DishDto } from '../types/dish'
+import type { CreateDishDto, DishDto } from '../types/dish'
 
 export async function getDishesByMenuId(menuId: number): Promise<DishDto[]> {
   const response = await httpClient.get<DishDto[]>(`/menus/${menuId}/dishes`)
+
+  return response.data
+}
+
+export async function createDishForMenu(
+  menuId: number,
+  dish: CreateDishDto,
+): Promise<DishDto> {
+  const response = await httpClient.post<DishDto>(
+    `/menus/${menuId}/dishes`,
+    dish,
+  )
 
   return response.data
 }
