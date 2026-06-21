@@ -64,22 +64,22 @@ function App() {
   const [isMenuSubmitting, setIsMenuSubmitting] = useState(false)
 
   useEffect(() => {
+    async function loadRestaurants() {
+      try {
+        setErrorMessage(null)
+
+        const data = await getRestaurants()
+
+        setRestaurants(data)
+      } catch {
+        setErrorMessage('Failed to load restaurants.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     loadRestaurants()
   }, [])
-
-  async function loadRestaurants() {
-    try {
-      setErrorMessage(null)
-
-      const data = await getRestaurants()
-
-      setRestaurants(data)
-    } catch {
-      setErrorMessage('Failed to load restaurants.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
   function handleEditMenu() {
     if (selectedMenu === null) {
       return

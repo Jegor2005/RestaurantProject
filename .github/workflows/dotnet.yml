@@ -37,6 +37,10 @@ jobs:
       working-directory: restaurant-client
       run: npm ci
 
+    - name: Lint frontend
+      working-directory: restaurant-client
+      run: npm run lint
+
     - name: Build frontend
       working-directory: restaurant-client
       run: npm run build
