@@ -11,6 +11,26 @@ builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+const string CorsPolicyName = "ConfiguredCors";
+
+var allowedOrigins = builder.Configuration
+    .GetSection("AllowedOrigins")
+    .Get<string[]>();
+
+if (allowedOrigins is { Length: > 0 })
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(CorsPolicyName, policy =>
+        {
+            policy
+                .WithOrigins(allowedOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+    });
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<IRestaurantService, RestaurantService>();
@@ -41,6 +61,11 @@ app.UseExceptionHandler();
 app.UseHttpLogging();
 
 app.UseHttpsRedirection();
+
+if (allowedOrigins is { Length: > 0 })
+{
+    app.UseCors(CorsPolicyName);
+}
 
 app.UseAuthorization();
 
