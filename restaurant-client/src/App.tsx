@@ -1,121 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useState } from 'react'
 import './App.css'
+import { getRestaurants } from './api/restaurantApi'
+import type { RestaurantDto } from './types/restaurant'
+
+function getRestaurantColor(color: string): string {
+  switch (color.toLowerCase()) {
+    case 'red':
+      return '#dc2626'
+    case 'blue':
+      return '#2563eb'
+    case 'green':
+      return '#16a34a'
+    default:
+      return '#1f2937'
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [restaurants, setRestaurants] = useState<RestaurantDto[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadRestaurants() {
+      try {
+        const data = await getRestaurants()
+        setRestaurants(data)
+      } catch {
+        setErrorMessage('Failed to load restaurants.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadRestaurants()
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <main className="app">
+      <section className="card">
+        <h1>Restaurant Network</h1>
+        <p className="subtitle">
+          React + TypeScript client connected to ASP.NET Core Web API.
+        </p>
+
+        {isLoading && <p>Loading restaurants...</p>}
+
+        {errorMessage && <p className="error">{errorMessage}</p>}
+
+        {!isLoading && !errorMessage && (
+          <div className="restaurant-list">
+            {restaurants.map((restaurant) => (
+              <article key={restaurant.id} className="restaurant-card"  style={{ borderLeftColor: getRestaurantColor(restaurant.color) }}>
+                <h2 style={{ color: getRestaurantColor(restaurant.color) }}>
+                  {restaurant.color} Restaurant
+                </h2>
+                <p>    <strong>Address:</strong> {restaurant.address}  </p>
+                <p>    <strong>Rent:</strong> {restaurant.rent} </p>
+                </article>))}
+          </div>
+        )}
       </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   )
 }
 
