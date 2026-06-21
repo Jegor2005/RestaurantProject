@@ -7,8 +7,7 @@ import {
   getRestaurants,
   updateRestaurant,
 } from './api/restaurantApi'
-import type { CreateRestaurantDto, RestaurantDto} from './types/restaurant'
-
+import type { RestaurantDto } from './types/restaurant'
 function getRestaurantColor(color: string): string {
   switch (color.toLowerCase()) {
     case 'red':
@@ -59,7 +58,9 @@ function App() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
   event.preventDefault()
 
-  if (!formData.color.trim() || !formData.address.trim() || !formData.rent.trim()) {
+  const rentValue = Number(formData.rent)
+
+  if (!formData.color.trim() || !formData.address.trim() || rentValue <= 0) {
     setErrorMessage('Please fill in all fields. Rent must be greater than 0.')
     return
   }
@@ -68,18 +69,27 @@ function App() {
     setIsSubmitting(true)
     setErrorMessage(null)
 
-    
-    const rentValue = Number(formData.rent)
     const restaurantData = {
       color: formData.color.trim(),
       address: formData.address.trim(),
       rent: rentValue,
     }
 
-    
-    if (!formData.color.trim() || !formData.address.trim() || rentValue <= 0) {
-      setErrorMessage('Please fill in all fields. Rent must be greater than 0.')
-      return
+    if (editingRestaurantId !== null) {
+      await updateRestaurant(editingRestaurantId, restaurantData)
+
+      setRestaurants((currentRestaurants) =>
+        currentRestaurants.map((restaurant) =>
+          restaurant.id === editingRestaurantId
+            ? {
+                ...restaurant,
+                ...restaurantData,
+              }
+            : restaurant,
+        ),
+      )
+
+      setEditingRestaurantId(null)
     } else {
       const createdRestaurant = await createRestaurant(restaurantData)
 
