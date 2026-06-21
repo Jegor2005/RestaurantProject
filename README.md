@@ -5,6 +5,20 @@ RestaurantProject is a full-stack restaurant network management application.
 
 The project includes a .NET 8 ASP.NET Core Web API and a React + TypeScript frontend client. It supports CRUD operations for restaurants, menus, and dishes. The backend uses Entity Framework Core with SQLite, DTO-based API contracts, service layer architecture, validation, automatic migrations, seed data, Swagger documentation, HTTP logging, global error handling with ProblemDetails, automated tests, and GitHub Actions CI.
 
+## Live Demo
+
+Frontend client:
+
+https://restaurant-project-omega-sand.vercel.app/
+
+API documentation:
+
+https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/swagger
+
+Example API endpoint:
+
+https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/api/restaurants
+
 ## Technologies
 
 * .NET 8
