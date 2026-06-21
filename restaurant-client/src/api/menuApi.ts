@@ -1,5 +1,5 @@
 import { httpClient } from './httpClient'
-import type { CreateMenuDto, MenuDto } from '../types/menu'
+import type { CreateMenuDto, MenuDto, UpdateMenuDto } from '../types/menu'
 
 export async function getMenuByRestaurantId(
   restaurantId: number,
@@ -25,4 +25,10 @@ export async function createMenuForRestaurant(
   )
 
   return response.data
+}
+export async function updateMenu(
+  id: number,
+  menu: UpdateMenuDto,
+): Promise<void> {
+  await httpClient.put(`/menus/${id}`, menu)
 }

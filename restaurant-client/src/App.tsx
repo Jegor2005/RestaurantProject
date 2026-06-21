@@ -15,6 +15,7 @@ import type { DishDto } from './types/dish'
 import {
   createMenuForRestaurant,
   getMenuByRestaurantId,
+  updateMenu,
 } from './api/menuApi'
 import {
   createRestaurant,
@@ -50,6 +51,7 @@ function App() {
     null,
   )
   const [selectedMenu, setSelectedMenu] = useState<MenuDto | null>(null)
+  const [isEditingMenu, setIsEditingMenu] = useState(false)
   const [isMenuLoading, setIsMenuLoading] = useState(false)
   const [selectedDishes, setSelectedDishes] = useState<DishDto[]>([])
   const [dishFormData, setDishFormData] =
@@ -76,6 +78,24 @@ function App() {
     } finally {
       setIsLoading(false)
     }
+  }
+  function handleEditMenu() {
+    if (selectedMenu === null) {
+      return
+    }
+
+    setIsEditingMenu(true)
+    setMenuFormData({
+      name: selectedMenu.name,
+      description: selectedMenu.description ?? '',
+    })
+    setErrorMessage(null)
+  }
+
+  function handleCancelMenuEdit() {
+    setIsEditingMenu(false)
+    setMenuFormData(initialMenuFormState)
+    setErrorMessage(null)
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -252,6 +272,7 @@ function App() {
       setSelectedMenu(null)
       setSelectedDishes([])
       setMenuFormData(initialMenuFormState)
+      setIsEditingMenu(false)
       setDishFormData(initialDishFormState)
       setEditingDishId(null)
 
@@ -274,8 +295,6 @@ function App() {
   async function handleCreateMenu(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    setDishFormData(initialDishFormState)
-    setEditingDishId(null)
     if (selectedRestaurantId === null) {
       return
     }
@@ -285,20 +304,43 @@ function App() {
       return
     }
 
+    const menuData = {
+      name: menuFormData.name.trim(),
+      description: menuFormData.description.trim() || null,
+    }
+
     try {
       setIsMenuSubmitting(true)
       setErrorMessage(null)
 
-      const createdMenu = await createMenuForRestaurant(selectedRestaurantId, {
-        name: menuFormData.name.trim(),
-        description: menuFormData.description.trim() || null,
-      })
+      if (isEditingMenu) {
+        if (selectedMenu === null) {
+          return
+        }
 
-      setSelectedMenu(createdMenu)
-      setSelectedDishes([])
+        await updateMenu(selectedMenu.id, menuData)
+
+        setSelectedMenu({
+          ...selectedMenu,
+          ...menuData,
+        })
+
+        setIsEditingMenu(false)
+      } else {
+        const createdMenu = await createMenuForRestaurant(
+          selectedRestaurantId,
+          menuData,
+        )
+
+        setSelectedMenu(createdMenu)
+        setSelectedDishes([])
+      }
+
       setMenuFormData(initialMenuFormState)
     } catch {
-      setErrorMessage('Failed to create menu.')
+      setErrorMessage(
+        isEditingMenu ? 'Failed to update menu.' : 'Failed to create menu.',
+      )
     } finally {
       setIsMenuSubmitting(false)
     }
@@ -480,6 +522,60 @@ function App() {
                       <strong>Restaurant ID:</strong>{' '}
                       {selectedMenu.restaurantId}
                     </p>
+                    <div className="card-actions">
+                      <button
+                        type="button"
+                        className="action-button edit-button"
+                        onClick={handleEditMenu}
+                      >
+                        Edit menu
+                      </button>
+                    </div>
+                    {isEditingMenu && (
+                      <form className="menu-form" onSubmit={handleCreateMenu}>
+                        <h3>Edit menu</h3>
+
+                        <label>
+                          Name
+                          <input
+                            value={menuFormData.name}
+                            onChange={(event) =>
+                              setMenuFormData({
+                                ...menuFormData,
+                                name: event.target.value,
+                              })
+                            }
+                            placeholder="Main Menu"
+                          />
+                        </label>
+
+                        <label>
+                          Description
+                          <textarea
+                            value={menuFormData.description}
+                            onChange={(event) =>
+                              setMenuFormData({
+                                ...menuFormData,
+                                description: event.target.value,
+                              })
+                            }
+                            placeholder="Default menu for this restaurant"
+                          />
+                        </label>
+
+                        <button type="submit" disabled={isMenuSubmitting}>
+                          {isMenuSubmitting ? 'Saving...' : 'Save menu'}
+                        </button>
+
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={handleCancelMenuEdit}
+                        >
+                          Cancel
+                        </button>
+                      </form>
+                    )}
                     <div className="dishes-section">
                       <h4>Dishes</h4>
                       {selectedDishes.length === 0 && (
