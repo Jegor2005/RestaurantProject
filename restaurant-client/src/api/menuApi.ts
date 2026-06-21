@@ -32,3 +32,6 @@ export async function updateMenu(
 ): Promise<void> {
   await httpClient.put(`/menus/${id}`, menu)
 }
+export async function deleteMenu(id: number): Promise<void> {
+  await httpClient.delete(`/menus/${id}`)
+}

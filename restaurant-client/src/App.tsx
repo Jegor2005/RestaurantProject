@@ -14,6 +14,7 @@ import {
 import type { DishDto } from './types/dish'
 import {
   createMenuForRestaurant,
+  deleteMenu,
   getMenuByRestaurantId,
   updateMenu,
 } from './api/menuApi'
@@ -98,6 +99,34 @@ function App() {
     setErrorMessage(null)
   }
 
+  async function handleDeleteMenu() {
+    if (selectedMenu === null) {
+      return
+    }
+
+    const shouldDelete = window.confirm(
+      'Delete this menu? All dishes in this menu will also be removed.',
+    )
+
+    if (!shouldDelete) {
+      return
+    }
+
+    try {
+      setErrorMessage(null)
+
+      await deleteMenu(selectedMenu.id)
+
+      setSelectedMenu(null)
+      setSelectedDishes([])
+      setMenuFormData(initialMenuFormState)
+      setDishFormData(initialDishFormState)
+      setIsEditingMenu(false)
+      setEditingDishId(null)
+    } catch {
+      setErrorMessage('Failed to delete menu.')
+    }
+  }
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -529,6 +558,13 @@ function App() {
                         onClick={handleEditMenu}
                       >
                         Edit menu
+                      </button>
+                      <button
+                        type="button"
+                        className="action-button delete-button"
+                        onClick={handleDeleteMenu}
+                      >
+                        Delete menu
                       </button>
                     </div>
                     {isEditingMenu && (
