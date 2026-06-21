@@ -18,3 +18,6 @@ export async function createDishForMenu(
 
   return response.data
 }
+export async function deleteDish(id: number): Promise<void> {
+  await httpClient.delete(`/dishes/${id}`)
+}
