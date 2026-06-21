@@ -1,5 +1,5 @@
 import { httpClient } from './httpClient'
-import type { MenuDto } from '../types/menu'
+import type { CreateMenuDto, MenuDto } from '../types/menu'
 
 export async function getMenuByRestaurantId(
   restaurantId: number,
@@ -10,7 +10,19 @@ export async function getMenuByRestaurantId(
     )
 
     return response.data
-  } catch (error) {
+  } catch {
     return null
   }
+}
+
+export async function createMenuForRestaurant(
+  restaurantId: number,
+  menu: CreateMenuDto,
+): Promise<MenuDto> {
+  const response = await httpClient.post<MenuDto>(
+    `/restaurants/${restaurantId}/menu`,
+    menu,
+  )
+
+  return response.data
 }

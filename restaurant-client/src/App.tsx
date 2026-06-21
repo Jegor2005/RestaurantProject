@@ -1,26 +1,33 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
-import { getMenuByRestaurantId } from './api/menuApi'
-import type { MenuDto } from './types/menu'
+import {
+  createMenuForRestaurant,
+  getMenuByRestaurantId,
+} from './api/menuApi'
 import {
   createRestaurant,
   deleteRestaurant,
   getRestaurants,
   updateRestaurant,
 } from './api/restaurantApi'
-import type { RestaurantDto } from './types/restaurant'
-import { getRestaurantColor } from './utils/restaurantColors'
+import type { MenuDto } from './types/menu'
+import {
+  initialMenuFormState,
+  type MenuFormState,
+} from './types/menuForm'
 import {
   initialRestaurantFormState,
   type RestaurantFormState,
 } from './types/restaurantForm'
-
-
+import type { RestaurantDto } from './types/restaurant'
+import { getRestaurantColor } from './utils/restaurantColors'
 
 function App() {
   const [restaurants, setRestaurants] = useState<RestaurantDto[]>([])
-  const [formData, setFormData] = useState<RestaurantFormState>(initialRestaurantFormState)
+  const [formData, setFormData] = useState<RestaurantFormState>(
+    initialRestaurantFormState,
+  )
   const [editingRestaurantId, setEditingRestaurantId] = useState<number | null>(
     null,
   )
@@ -33,6 +40,9 @@ function App() {
   )
   const [selectedMenu, setSelectedMenu] = useState<MenuDto | null>(null)
   const [isMenuLoading, setIsMenuLoading] = useState(false)
+  const [menuFormData, setMenuFormData] =
+    useState<MenuFormState>(initialMenuFormState)
+  const [isMenuSubmitting, setIsMenuSubmitting] = useState(false)
 
   useEffect(() => {
     loadRestaurants()
@@ -129,6 +139,7 @@ function App() {
       setIsMenuLoading(true)
       setErrorMessage(null)
       setSelectedRestaurantId(restaurantId)
+      setMenuFormData(initialMenuFormState)
 
       const menu = await getMenuByRestaurantId(restaurantId)
 
@@ -137,6 +148,36 @@ function App() {
       setErrorMessage('Failed to load menu.')
     } finally {
       setIsMenuLoading(false)
+    }
+  }
+
+  async function handleCreateMenu(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (selectedRestaurantId === null) {
+      return
+    }
+
+    if (!menuFormData.name.trim()) {
+      setErrorMessage('Menu name is required.')
+      return
+    }
+
+    try {
+      setIsMenuSubmitting(true)
+      setErrorMessage(null)
+
+      const createdMenu = await createMenuForRestaurant(selectedRestaurantId, {
+        name: menuFormData.name.trim(),
+        description: menuFormData.description.trim() || null,
+      })
+
+      setSelectedMenu(createdMenu)
+      setMenuFormData(initialMenuFormState)
+    } catch {
+      setErrorMessage('Failed to create menu.')
+    } finally {
+      setIsMenuSubmitting(false)
     }
   }
 
@@ -319,9 +360,47 @@ function App() {
                 )}
 
                 {!isMenuLoading && !selectedMenu && (
-                  <p className="empty-message">
-                    No menu found for this restaurant.
-                  </p>
+                  <>
+                    <p className="empty-message">
+                      No menu found for this restaurant.
+                    </p>
+
+                    <form className="menu-form" onSubmit={handleCreateMenu}>
+                      <h3>Create menu</h3>
+
+                      <label>
+                        Name
+                        <input
+                          value={menuFormData.name}
+                          onChange={(event) =>
+                            setMenuFormData({
+                              ...menuFormData,
+                              name: event.target.value,
+                            })
+                          }
+                          placeholder="Main Menu"
+                        />
+                      </label>
+
+                      <label>
+                        Description
+                        <textarea
+                          value={menuFormData.description}
+                          onChange={(event) =>
+                            setMenuFormData({
+                              ...menuFormData,
+                              description: event.target.value,
+                            })
+                          }
+                          placeholder="Default menu for this restaurant"
+                        />
+                      </label>
+
+                      <button type="submit" disabled={isMenuSubmitting}>
+                        {isMenuSubmitting ? 'Creating...' : 'Create menu'}
+                      </button>
+                    </form>
+                  </>
                 )}
               </section>
             )}
