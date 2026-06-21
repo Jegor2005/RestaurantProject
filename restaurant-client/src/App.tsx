@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
+import { getDishesByMenuId } from './api/dishApi'
+import type { DishDto } from './types/dish'
 import {
   createMenuForRestaurant,
   getMenuByRestaurantId,
@@ -40,6 +42,7 @@ function App() {
   )
   const [selectedMenu, setSelectedMenu] = useState<MenuDto | null>(null)
   const [isMenuLoading, setIsMenuLoading] = useState(false)
+  const [selectedDishes, setSelectedDishes] = useState<DishDto[]>([])
   const [menuFormData, setMenuFormData] =
     useState<MenuFormState>(initialMenuFormState)
   const [isMenuSubmitting, setIsMenuSubmitting] = useState(false)
@@ -135,21 +138,29 @@ function App() {
   }
 
   async function handleViewMenu(restaurantId: number) {
-    try {
-      setIsMenuLoading(true)
-      setErrorMessage(null)
-      setSelectedRestaurantId(restaurantId)
-      setMenuFormData(initialMenuFormState)
+  try {
+    setIsMenuLoading(true)
+    setErrorMessage(null)
+    setSelectedRestaurantId(restaurantId)
+    setSelectedMenu(null)
+    setSelectedDishes([])
+    setMenuFormData(initialMenuFormState)
 
-      const menu = await getMenuByRestaurantId(restaurantId)
+    const menu = await getMenuByRestaurantId(restaurantId)
 
-      setSelectedMenu(menu)
-    } catch {
-      setErrorMessage('Failed to load menu.')
-    } finally {
-      setIsMenuLoading(false)
+    setSelectedMenu(menu)
+
+    if (menu !== null) {
+      const dishes = await getDishesByMenuId(menu.id)
+
+      setSelectedDishes(dishes)
     }
+  } catch {
+    setErrorMessage('Failed to load menu.')
+  } finally {
+    setIsMenuLoading(false)
   }
+}
 
   async function handleCreateMenu(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -173,6 +184,7 @@ function App() {
       })
 
       setSelectedMenu(createdMenu)
+      setSelectedDishes([])
       setMenuFormData(initialMenuFormState)
     } catch {
       setErrorMessage('Failed to create menu.')
@@ -200,6 +212,7 @@ function App() {
       if (selectedRestaurantId === id) {
         setSelectedRestaurantId(null)
         setSelectedMenu(null)
+        setSelectedDishes([])
       }
     } catch {
       setErrorMessage('Failed to delete restaurant.')
@@ -356,6 +369,27 @@ function App() {
                       <strong>Restaurant ID:</strong>{' '}
                       {selectedMenu.restaurantId}
                     </p>
+                    <div className="dishes-section">
+                  <h4>Dishes</h4> {selectedDishes.length === 0 && (
+                    <p className="empty-message">No dishes found for this menu.</p>
+                  )}
+                  {selectedDishes.length > 0 && (
+                    <div className="dish-list">
+                      {selectedDishes.map((dish) => (
+                        <article key={dish.id} className="dish-card">
+                        <h5>{dish.name}</h5>
+                      <p>
+                        <strong>Category:</strong> {dish.category}
+                      </p>
+                      <p>
+                        <strong>Price:</strong> {dish.price}
+                      </p>
+                      <p>{dish.description || 'No description provided.'}</p>
+                      </article>
+                      ))}
+                    </div>
+  )}
+</div>
                   </div>
                 )}
 

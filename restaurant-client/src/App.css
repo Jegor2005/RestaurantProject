@@ -204,3 +204,33 @@ textarea {
   font: inherit;
   resize: vertical;
 }
+.dishes-section {
+  margin-top: 24px;
+}
+
+.dishes-section h4 {
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.dish-list {
+  display: grid;
+  gap: 12px;
+}
+
+.dish-card {
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+.dish-card h5 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 16px;
+}
+
+.dish-card p {
+  margin: 6px 0;
+}
