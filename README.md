@@ -64,42 +64,68 @@ Each dish belongs to one menu.
 
 ## Project Structure
 
-RestaurantNetwork.Api
-├── Controllers
-│   ├── RestaurantsController.cs
-│   ├── MenusController.cs
-│   └── DishesController.cs
+```text
+RestaurantProject
+├── RestaurantNetwork.Api
+│   ├── Controllers
+│   │   ├── RestaurantsController.cs
+│   │   ├── MenusController.cs
+│   │   └── DishesController.cs
+│   │
+│   ├── Data
+│   │   ├── AppDbContext.cs
+│   │   ├── DbSeeder.cs
+│   │   └── Migrations
+│   │
+│   ├── DTO
+│   │   ├── RestaurantDto.cs
+│   │   ├── CreateRestaurantDto.cs
+│   │   ├── UpdateRestaurantDto.cs
+│   │   ├── MenuDto.cs
+│   │   ├── CreateMenuDto.cs
+│   │   ├── UpdateMenuDto.cs
+│   │   ├── DishDto.cs
+│   │   ├── CreateDishDto.cs
+│   │   ├── UpdateDishDto.cs
+│   │   ├── DishQueryDto.cs
+│   │   └── PagedResultDto.cs
+│   │
+│   ├── Services
+│   │   ├── IRestaurantService.cs
+│   │   ├── RestaurantService.cs
+│   │   ├── IMenuService.cs
+│   │   ├── MenuService.cs
+│   │   ├── IDishService.cs
+│   │   └── DishService.cs
+│   │
+│   └── Program.cs
 │
-├── Data
-│   ├── AppDbContext.cs
-│   ├── DbSeeder.cs
-│   └── Migrations
+├── RestaurantProject.DataModel
+│   ├── Restaurant.cs
+│   ├── Menu.cs
+│   └── Dish.cs
 │
-├── DTO
-│   ├── RestaurantDto.cs
-│   ├── CreateRestaurantDto.cs
-│   ├── UpdateRestaurantDto.cs
-│   ├── MenuDto.cs
-│   ├── CreateMenuDto.cs
-│   ├── UpdateMenuDto.cs
-│   ├── DishDto.cs
-│   ├── CreateDishDto.cs
-│   └── UpdateDishDto.cs
+├── RestaurantNetwork.Api.Tests
+│   ├── ApiIntegrationTests.cs
+│   ├── RestaurantServiceTests.cs
+│   ├── MenuServiceTests.cs
+│   └── DishServiceTests.cs
 │
-├── Services
-│   ├── IRestaurantService.cs
-│   ├── RestaurantService.cs
-│   ├── IMenuService.cs
-│   ├── MenuService.cs
-│   ├── IDishService.cs
-│   └── DishService.cs
+├── restaurant-client
+│   ├── src
+│   │   ├── api
+│   │   ├── types
+│   │   ├── utils
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   │
+│   ├── package.json
+│   └── vite.config.ts
 │
-└── Program.cs
-RestaurantNetwork.Api.Tests
-├── ApiIntegrationTests.cs
-├── DishServiceTests.cs
-├── MenuServiceTests.cs
-└── RestaurantServiceTests.cs
+└── .github
+    └── workflows
+        └── dotnet.yml
+```
 
 ### Domain models are stored in:
 
