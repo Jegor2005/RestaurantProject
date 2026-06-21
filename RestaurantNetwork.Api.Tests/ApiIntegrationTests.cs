@@ -50,6 +50,25 @@ namespace RestaurantNetwork.Api.Tests
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
+        [Fact]
+        public async Task GetMenuByRestaurantId_WithExistingRestaurant_ReturnsMenu()
+        {
+            var menu = await _client.GetFromJsonAsync<MenuDto>("/api/restaurants/1/menu");
+
+            Assert.NotNull(menu);
+            Assert.Equal("Main Menu", menu.Name);
+            Assert.Equal(1, menu.RestaurantId);
+        }
+
+        [Fact]
+        public async Task GetDishesByMenuId_WithExistingMenu_ReturnsDishes()
+        {
+            var dishes = await _client.GetFromJsonAsync<List<DishDto>>("/api/menus/1/dishes");
+
+            Assert.NotNull(dishes);
+            Assert.Equal(3, dishes.Count);
+            Assert.Contains(dishes, dish => dish.Name == "Classic Burger");
+        }
     }
 
     public class RestaurantApiFactory : WebApplicationFactory<Program>
