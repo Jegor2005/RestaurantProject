@@ -10,37 +10,17 @@ import {
   updateRestaurant,
 } from './api/restaurantApi'
 import type { RestaurantDto } from './types/restaurant'
+import { getRestaurantColor } from './utils/restaurantColors'
+import {
+  initialRestaurantFormState,
+  type RestaurantFormState,
+} from './types/restaurantForm'
 
-function getRestaurantColor(color: string): string {
-  switch (color.toLowerCase()) {
-    case 'red':
-      return '#dc2626'
-    case 'blue':
-      return '#2563eb'
-    case 'green':
-      return '#16a34a'
-    case 'yellow':
-      return '#ca8a04'
-    default:
-      return '#1f2937'
-  }
-}
 
-type RestaurantFormState = {
-  color: string
-  address: string
-  rent: string
-}
-
-const initialFormState: RestaurantFormState = {
-  color: '',
-  address: '',
-  rent: '',
-}
 
 function App() {
   const [restaurants, setRestaurants] = useState<RestaurantDto[]>([])
-  const [formData, setFormData] = useState<RestaurantFormState>(initialFormState)
+  const [formData, setFormData] = useState<RestaurantFormState>(initialRestaurantFormState)
   const [editingRestaurantId, setEditingRestaurantId] = useState<number | null>(
     null,
   )
@@ -116,7 +96,7 @@ function App() {
         ])
       }
 
-      setFormData(initialFormState)
+      setFormData(initialRestaurantFormState)
     } catch {
       setErrorMessage(
         editingRestaurantId !== null
@@ -140,7 +120,7 @@ function App() {
 
   function handleCancelEdit() {
     setEditingRestaurantId(null)
-    setFormData(initialFormState)
+    setFormData(initialRestaurantFormState)
     setErrorMessage(null)
   }
 
