@@ -1,9 +1,9 @@
 ﻿# RestaurantProject
 [![.NET Build and Test](https://github.com/Jegor2005/RestaurantProject/actions/workflows/dotnet.yml/badge.svg)](https://github.com/Jegor2005/RestaurantProject/actions/workflows/dotnet.yml)
 
-RestaurantProject is a .NET 8 ASP.NET Core Web API for managing a small restaurant network.
+RestaurantProject is a full-stack restaurant network management application.
 
-The project supports CRUD operations for restaurants, menus, and dishes. It uses Entity Framework Core with SQLite, DTO-based API contracts, service layer architecture, validation, automatic migrations, seed data, Swagger documentation, HTTP logging, and global error handling with ProblemDetails.
+The project includes a .NET 8 ASP.NET Core Web API and a React + TypeScript frontend client. It supports CRUD operations for restaurants, menus, and dishes. The backend uses Entity Framework Core with SQLite, DTO-based API contracts, service layer architecture, validation, automatic migrations, seed data, Swagger documentation, HTTP logging, global error handling with ProblemDetails, automated tests, and GitHub Actions CI.
 
 ## Technologies
 
@@ -21,12 +21,22 @@ The project supports CRUD operations for restaurants, menus, and dishes. It uses
 * EF Core SQLite in-memory testing
 * Microsoft.AspNetCore.Mvc.Testing
 * API integration testing
+* React
+* TypeScript
+* Vite
+* Axios
+* GitHub Actions
+* ESLint
 
 ## Main Features
 
 * Manage restaurants
 * Manage menus assigned to restaurants
 * Manage dishes assigned to menus
+* Use a React + TypeScript frontend client
+* Create, edit, delete, and view restaurants from the UI
+* Create, edit, delete, and view menus from the UI
+* Create, edit, delete, and view dishes from the UI
 * Validate incoming API requests
 * Automatically apply EF Core migrations on startup
 * Automatically seed initial data
@@ -128,6 +138,10 @@ DishService
 - category filtering
 - price sorting
 - dish creation for an existing menu
+- updating an existing dish
+- returning false when updating a missing dish
+- deleting an existing dish
+- returning false when deleting a missing dish
 ```
 
 Service tests use SQLite in-memory database to verify EF Core behavior close to the real application database.
@@ -170,10 +184,14 @@ The project uses GitHub Actions to automatically run build and tests on every pu
 
 The workflow runs:
 
+
 ```text
 dotnet restore
 dotnet build
 dotnet test
+npm ci
+npm run lint
+npm run build
 ```
 
 ## API Endpoints
@@ -297,6 +315,8 @@ GET /api/dishes?category=Main%20Course&minPrice=8&sortBy=price&sortDirection=asc
 
 ```text
 .NET 8 SDK
+Node.js 20+
+npm
 ```
 
 ### Run with Visual Studio
@@ -332,6 +352,14 @@ Run the API:
 
 ```bash
 dotnet run --project RestaurantNetwork.Api
+```
+
+Run the frontend client:
+
+```bash
+cd restaurant-client
+npm install
+npm run dev
 ```
 
 Run tests:
@@ -407,11 +435,11 @@ Possible next improvements:
 * Docker support
 * order management
 * staff management
-* frontend client
+* deployment
 
 ## Current Status
 
-The current version is an MVP-ready backend API.
+The current version is a full-stack MVP with a .NET Web API backend and a React + TypeScript frontend client.
 
 Implemented:
 
@@ -429,3 +457,7 @@ Implemented:
 * service layer
 * HTTP logging
 * ProblemDetails error handling
+* React + TypeScript frontend client
+* frontend linting
+* frontend production build
+* GitHub Actions CI for backend and frontend
