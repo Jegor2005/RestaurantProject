@@ -14,3 +14,6 @@ export async function createRestaurant(
 
   return response.data
 }
+export async function deleteRestaurant(id: number): Promise<void> {
+  await httpClient.delete(`/restaurants/${id}`)
+}

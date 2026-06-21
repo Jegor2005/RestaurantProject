@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
-import { createRestaurant, getRestaurants } from './api/restaurantApi'
+import {createRestaurant,  deleteRestaurant,  getRestaurants} from './api/restaurantApi'
 import type { CreateRestaurantDto, RestaurantDto } from './types/restaurant'
 
 function getRestaurantColor(color: string): string {
@@ -75,6 +75,25 @@ function App() {
       setIsSubmitting(false)
     }
   }
+  async function handleDelete(id: number) {
+  const shouldDelete = window.confirm('Delete this restaurant?')
+
+  if (!shouldDelete) {
+    return
+  }
+
+  try {
+    setErrorMessage(null)
+
+    await deleteRestaurant(id)
+
+    setRestaurants((currentRestaurants) =>
+      currentRestaurants.filter((restaurant) => restaurant.id !== id),
+    )
+  } catch {
+    setErrorMessage('Failed to delete restaurant.')
+  }
+}
 
   return (
     <main className="app">
@@ -158,6 +177,8 @@ function App() {
                 <p>
                   <strong>Rent:</strong> {restaurant.rent}
                 </p>
+                
+                  <button type="button" className="delete-button" onClick={() => handleDelete(restaurant.id)}>  Delete </button>
               </article>
             ))}
           </div>
