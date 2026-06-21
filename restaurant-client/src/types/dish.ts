@@ -13,3 +13,9 @@ export interface CreateDishDto {
   category: string
   description: string
 }
+export interface UpdateDishDto {
+  name: string
+  price: number
+  category: string
+  description: string
+}

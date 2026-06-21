@@ -5,6 +5,7 @@ import {
   createDishForMenu,
   deleteDish,
   getDishesByMenuId,
+  updateDish,
 } from './api/dishApi'
 import {
   initialDishFormState,
@@ -53,6 +54,7 @@ function App() {
   const [selectedDishes, setSelectedDishes] = useState<DishDto[]>([])
   const [dishFormData, setDishFormData] =
     useState<DishFormState>(initialDishFormState)
+  const [editingDishId, setEditingDishId] = useState<number | null>(null)
   const [isDishSubmitting, setIsDishSubmitting] = useState(false)
   const [menuFormData, setMenuFormData] =
     useState<MenuFormState>(initialMenuFormState)
@@ -166,24 +168,62 @@ function App() {
       return
     }
 
+    const dishData = {
+      name: dishFormData.name.trim(),
+      price: priceValue,
+      category: dishFormData.category.trim(),
+      description: dishFormData.description.trim(),
+    }
+
     try {
       setIsDishSubmitting(true)
       setErrorMessage(null)
 
-      const createdDish = await createDishForMenu(selectedMenu.id, {
-        name: dishFormData.name.trim(),
-        price: priceValue,
-        category: dishFormData.category.trim(),
-        description: dishFormData.description.trim(),
-      })
+      if (editingDishId !== null) {
+        await updateDish(editingDishId, dishData)
 
-      setSelectedDishes((currentDishes) => [...currentDishes, createdDish])
+        setSelectedDishes((currentDishes) =>
+          currentDishes.map((dish) =>
+            dish.id === editingDishId
+              ? {
+                ...dish,
+                ...dishData,
+              }
+              : dish,
+          ),
+        )
+
+        setEditingDishId(null)
+      } else {
+        const createdDish = await createDishForMenu(selectedMenu.id, dishData)
+
+        setSelectedDishes((currentDishes) => [...currentDishes, createdDish])
+      }
+
       setDishFormData(initialDishFormState)
     } catch {
-      setErrorMessage('Failed to create dish.')
+      setErrorMessage(
+        editingDishId !== null ? 'Failed to update dish.' : 'Failed to create dish.',
+      )
     } finally {
       setIsDishSubmitting(false)
     }
+  }
+  function handleEditDish(dish: DishDto) {
+    setEditingDishId(dish.id)
+    setDishFormData({
+      name: dish.name,
+      price: String(dish.price),
+      category: dish.category,
+      description: dish.description,
+    })
+    setErrorMessage(null)
+  }
+
+  function handleCancelDishEdit() {
+    setEditingDishId(null)
+    setDishFormData(initialDishFormState)
+    setErrorMessage(null)
   }
   async function handleDeleteDish(id: number) {
     const shouldDelete = window.confirm('Delete this dish?')
@@ -213,6 +253,7 @@ function App() {
       setSelectedDishes([])
       setMenuFormData(initialMenuFormState)
       setDishFormData(initialDishFormState)
+      setEditingDishId(null)
 
       const menu = await getMenuByRestaurantId(restaurantId)
 
@@ -233,6 +274,8 @@ function App() {
   async function handleCreateMenu(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    setDishFormData(initialDishFormState)
+    setEditingDishId(null)
     if (selectedRestaurantId === null) {
       return
     }
@@ -461,6 +504,14 @@ function App() {
                               <div className="card-actions">
                                 <button
                                   type="button"
+                                  className="action-button edit-button"
+                                  onClick={() => handleEditDish(dish)}
+                                >
+                                  Edit
+                                </button>
+
+                                <button
+                                  type="button"
                                   className="action-button delete-button"
                                   onClick={() => handleDeleteDish(dish.id)}
                                 >
@@ -472,7 +523,7 @@ function App() {
                         </div>
                       )}
                       <form className="dish-form" onSubmit={handleCreateDish}>
-                        <h4>Add dish</h4>
+                        <h4>{editingDishId === null ? 'Add dish' : 'Edit dish'}</h4>
 
                         <div className="dish-form-grid">
                           <label>
@@ -536,8 +587,21 @@ function App() {
                         </label>
 
                         <button type="submit" disabled={isDishSubmitting}>
-                          {isDishSubmitting ? 'Adding...' : 'Add dish'}
+                          {isDishSubmitting
+                            ? 'Saving...'
+                            : editingDishId === null
+                              ? 'Add dish'
+                              : 'Save dish'}
                         </button>
+                        {editingDishId !== null && (
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={handleCancelDishEdit}
+                          >
+                            Cancel
+                          </button>
+                        )}
                       </form>
                     </div>
                   </div>
