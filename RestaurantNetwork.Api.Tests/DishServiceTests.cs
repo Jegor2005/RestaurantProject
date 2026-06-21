@@ -31,6 +31,90 @@ namespace RestaurantNetwork.Api.Tests
                 Assert.Equal(2, result.TotalPages);
             }
         }
+        [Fact]
+        public async Task UpdateAsync_WithExistingDish_UpdatesDish()
+        {
+            var (db, connection) = await CreateDbContextAsync();
+
+            await using (connection)
+            await using (db)
+            {
+                var service = new DishService(db);
+
+                var updated = await service.UpdateAsync(1, new UpdateDishDto
+                {
+                    Name = "Updated Burger",
+                    Price = 14.99m,
+                    Category = "Updated Category",
+                    Description = "Updated description"
+                });
+
+                var dishFromDb = await db.Dishes.FindAsync(1);
+
+                Assert.True(updated);
+                Assert.NotNull(dishFromDb);
+                Assert.Equal("Updated Burger", dishFromDb!.Name);
+                Assert.Equal(14.99m, dishFromDb.Price);
+                Assert.Equal("Updated Category", dishFromDb.Category);
+                Assert.Equal("Updated description", dishFromDb.Description);
+            }
+        }
+
+        [Fact]
+        public async Task UpdateAsync_WithMissingDish_ReturnsFalse()
+        {
+            var (db, connection) = await CreateDbContextAsync();
+
+            await using (connection)
+            await using (db)
+            {
+                var service = new DishService(db);
+
+                var updated = await service.UpdateAsync(999, new UpdateDishDto
+                {
+                    Name = "Missing Dish",
+                    Price = 10.00m,
+                    Category = "Missing Category",
+                    Description = "Missing description"
+                });
+
+                Assert.False(updated);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WithExistingDish_DeletesDish()
+        {
+            var (db, connection) = await CreateDbContextAsync();
+
+            await using (connection)
+            await using (db)
+            {
+                var service = new DishService(db);
+
+                var deleted = await service.DeleteAsync(1);
+                var dishFromDb = await db.Dishes.FindAsync(1);
+
+                Assert.True(deleted);
+                Assert.Null(dishFromDb);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteAsync_WithMissingDish_ReturnsFalse()
+        {
+            var (db, connection) = await CreateDbContextAsync();
+
+            await using (connection)
+            await using (db)
+            {
+                var service = new DishService(db);
+
+                var deleted = await service.DeleteAsync(999);
+
+                Assert.False(deleted);
+            }
+        }
 
         [Fact]
         public async Task GetAllAsync_WithCategoryFilter_ReturnsOnlyMatchingCategory()
