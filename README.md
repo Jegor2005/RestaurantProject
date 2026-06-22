@@ -408,6 +408,17 @@ Run tests:
 dotnet test
 ```
 
+
+### Frontend Environment Variables
+
+The frontend can use an environment variable to point to a deployed API:
+
+```env
+VITE_API_BASE_URL=https://your-api-url.azurewebsites.net/api
+```
+
+For local development, this variable can be omitted because Vite proxy forwards `/api` requests to the local backend.
+
 The application uses SQLite. The database file is created automatically when the project starts.
 
 Migrations are applied automatically on startup, and seed data is inserted if the database is empty.
