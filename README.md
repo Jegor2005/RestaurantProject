@@ -21,6 +21,10 @@ Example API endpoint:
 
 https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/api/restaurants
 
+Health check:
+
+https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/health
+
 ## Technologies
 
 * .NET 8
