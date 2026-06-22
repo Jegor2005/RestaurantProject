@@ -41,6 +41,44 @@ The API uses SQLite with Entity Framework Core. CORS is configured through Azure
 
 The deployed demo also includes a reset endpoint that restores the original seed data.
 
+## Deployment Configuration
+
+The project is deployed as a full-stack demo:
+
+- Frontend: Vercel
+- Backend API: Azure App Service
+- Database: SQLite through Entity Framework Core
+
+### Azure App Service environment variables
+
+The backend uses the following Azure App Service application settings:
+
+```text
+EnableSwagger=true
+EnableDemoReset=true
+AllowedOrigins__0=https://restaurant-project-omega-sand.vercel.app
+```
+
+`EnableSwagger` enables Swagger UI for the deployed demo environment.
+
+`EnableDemoReset` enables the demo reset endpoint:
+
+```text
+POST /api/demo/reset
+```
+
+`AllowedOrigins__0` configures CORS and allows the deployed Vercel frontend to call the Azure API.
+
+### Vercel environment variables
+
+The frontend uses the following Vercel environment variable:
+
+```text
+VITE_API_BASE_URL=https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/api
+```
+
+This value points the React client to the deployed Azure backend API.
+
 ## Technologies
 
 * .NET 8
