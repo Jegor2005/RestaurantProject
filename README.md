@@ -25,6 +25,22 @@ Health check:
 
 https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/health
 
+## Deployment Architecture
+
+```mermaid
+flowchart LR
+    User[User / Recruiter] --> Frontend[Vercel<br/>React + TypeScript]
+    Frontend --> API[Azure App Service<br/>ASP.NET Core Web API]
+    API --> DB[SQLite Database<br/>EF Core]
+    API --> Swagger[Swagger / OpenAPI]
+```
+
+The frontend is deployed on Vercel and communicates with the ASP.NET Core API hosted on Azure App Service.
+
+The API uses SQLite with Entity Framework Core. CORS is configured through Azure environment variables to allow the deployed frontend to call the backend.
+
+The deployed demo also includes a reset endpoint that restores the original seed data.
+
 ## Technologies
 
 * .NET 8

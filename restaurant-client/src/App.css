@@ -270,3 +270,11 @@ textarea {
   font-size: 0.95rem;
   line-height: 1.5;
 }
+.demo-actions {
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.demo-actions .secondary-button {
+  margin-left: 0;
+}
