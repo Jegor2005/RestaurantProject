@@ -443,7 +443,10 @@ function App() {
         <p className="subtitle">
           React + TypeScript client connected to ASP.NET Core Web API.
         </p>
-
+        <p className="demo-notice">
+          Public demo: data can be changed by visitors. Use the reset button to restore
+          the original restaurants, menus and dishes.
+        </p>
         <form className="restaurant-form" onSubmit={handleSubmit}>
           <h2>
             {editingRestaurantId === null ? 'Add restaurant' : 'Edit restaurant'}

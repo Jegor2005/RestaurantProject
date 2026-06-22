@@ -259,7 +259,13 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
-.demo-actions {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
+.demo-notice {
+  margin-top: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #dbeafe;
+  border-radius: 0.75rem;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }

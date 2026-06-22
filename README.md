@@ -11,6 +11,8 @@ Frontend client:
 
 https://restaurant-project-omega-sand.vercel.app/
 
+The live demo is public. Visitors can create, edit, and delete data. Use the **Reset demo data** button in the frontend to restore the original seed data.
+
 API documentation:
 
 https://restaurantnetwork-api-egor-ercmf9hrardshzhf.polandcentral-01.azurewebsites.net/swagger
