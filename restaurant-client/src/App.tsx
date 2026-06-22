@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
+import { resetDemoData } from './api/demoApi'
 import {
   createDishForMenu,
   deleteDish,
@@ -62,6 +63,7 @@ function App() {
   const [menuFormData, setMenuFormData] =
     useState<MenuFormState>(initialMenuFormState)
   const [isMenuSubmitting, setIsMenuSubmitting] = useState(false)
+  const [isDemoResetting, setIsDemoResetting] = useState(false)
 
   useEffect(() => {
     async function loadRestaurants() {
@@ -91,6 +93,39 @@ function App() {
       description: selectedMenu.description ?? '',
     })
     setErrorMessage(null)
+  }
+  async function handleResetDemoData() {
+    const shouldReset = window.confirm(
+      'Reset demo data? This will restore the original restaurants, menus and dishes.',
+    )
+
+    if (!shouldReset) {
+      return
+    }
+
+    try {
+      setIsDemoResetting(true)
+      setErrorMessage(null)
+
+      await resetDemoData()
+
+      const data = await getRestaurants()
+
+      setRestaurants(data)
+      setSelectedRestaurantId(null)
+      setSelectedMenu(null)
+      setSelectedDishes([])
+      setFormData(initialRestaurantFormState)
+      setMenuFormData(initialMenuFormState)
+      setDishFormData(initialDishFormState)
+      setEditingRestaurantId(null)
+      setIsEditingMenu(false)
+      setEditingDishId(null)
+    } catch {
+      setErrorMessage('Failed to reset demo data.')
+    } finally {
+      setIsDemoResetting(false)
+    }
   }
 
   function handleCancelMenuEdit() {
@@ -480,7 +515,16 @@ function App() {
         </form>
 
         {isLoading && <p>Loading restaurants...</p>}
-
+        <div className="demo-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={handleResetDemoData}
+            disabled={isDemoResetting}
+          >
+            {isDemoResetting ? 'Resetting demo data...' : 'Reset demo data'}
+          </button>
+        </div>
         {errorMessage && <p className="error">{errorMessage}</p>}
 
         {!isLoading && (

@@ -259,3 +259,6 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+.demo-actions {
+  margin-top: 1rem;
+}
