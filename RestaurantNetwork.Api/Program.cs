@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
 
 const string CorsPolicyName = "ConfiguredCors";
 
@@ -70,6 +71,7 @@ if (allowedOrigins is { Length: > 0 })
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
 public partial class Program

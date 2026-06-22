@@ -261,6 +261,7 @@ textarea {
 }
 .demo-notice {
   margin-top: 0.75rem;
+  margin-bottom: 1.5rem;
   padding: 0.85rem 1rem;
   border: 1px solid #dbeafe;
   border-radius: 0.75rem;
